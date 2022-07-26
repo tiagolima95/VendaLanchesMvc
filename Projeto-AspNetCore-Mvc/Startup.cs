@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Projeto_AspNetCore_Mvc.Context;
+using Projeto_AspNetCore_Mvc.Repositories;
+using Projeto_AspNetCore_Mvc.Repositories.Interfaces;
 
-namespace VendaLanches;
+namespace Projeto_AspNetCore_Mvc;
 
 public class Startup
 {
@@ -17,6 +19,10 @@ public class Startup
     {
         services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+        services.AddTransient<ICategoriaRepository,CategoriaRepository>();
+        services.AddTransient<ILancheRepository, LancheRepository>();
+
         services.AddControllersWithViews();
     }
 

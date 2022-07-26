@@ -1,5 +1,5 @@
 
-namespace VendaLanches;
+namespace Projeto_AspNetCore_Mvc;
 
 public class Program
 {
