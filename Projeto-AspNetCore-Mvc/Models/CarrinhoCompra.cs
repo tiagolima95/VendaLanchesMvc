@@ -1,4 +1,5 @@
-﻿using Projeto_AspNetCore_Mvc.Context;
+﻿using Microsoft.EntityFrameworkCore;
+using Projeto_AspNetCore_Mvc.Context;
 
 namespace Projeto_AspNetCore_Mvc.Models
 {
@@ -81,5 +82,33 @@ namespace Projeto_AspNetCore_Mvc.Models
             return quantidadeLocal;
         }
 
+        public List<CarrinhoCompraItem> GetCarrinhoCompraItems()
+        {
+            if(CarrinhoCompraItens == null)
+            {
+                CarrinhoCompraItens = _context.CarrinhoCompraItems.Where(c => c.CarrinhoCompraId == CarrinhoCompraId)
+                                    .Include(s => s.Lanche).ToList();
+            }
+
+            return CarrinhoCompraItens;
+        }
+
+        public void LimparCarrinho()
+        {
+            var carrinhoItens = _context.CarrinhoCompraItems
+                                .Where(carrinho => carrinho.CarrinhoCompraId == CarrinhoCompraId);
+
+            _context.CarrinhoCompraItems.RemoveRange(carrinhoItens);
+            _context.SaveChanges();
+        }
+
+        public decimal GetCarrinhoCompraTotal()
+        {
+            var total = _context.CarrinhoCompraItems
+                        .Where(c => c.CarrinhoCompraId == CarrinhoCompraId)
+                        .Select(c => c.Lanche.Preco * c.Quantidade).Sum();
+
+            return total;
+        }
     }
 }
