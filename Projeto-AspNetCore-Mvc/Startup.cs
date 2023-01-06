@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Projeto_AspNetCore_Mvc.Context;
+using Projeto_AspNetCore_Mvc.Models;
 using Projeto_AspNetCore_Mvc.Repositories;
 using Projeto_AspNetCore_Mvc.Repositories.Interfaces;
 
@@ -22,8 +23,13 @@ public class Startup
 
         services.AddTransient<ICategoriaRepository,CategoriaRepository>();
         services.AddTransient<ILancheRepository, LancheRepository>();
+        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+        services.AddScoped(sp => CarrinhoCompra.GetCarrinho(sp));
 
         services.AddControllersWithViews();
+
+        services.AddMemoryCache();
+        services.AddSession();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,14 +50,23 @@ public class Startup
 
         app.UseRouting();
 
+        app.UseSession();
+
         app.UseAuthorization();
 
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllerRoute(
+                name: "categoriaFiltro",
+                pattern: "Lanche/{action}/{categoria?}",
+                defaults: new { controller = "Lanche", action = "List" });
+            
+            endpoints.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
         });
+
+       
     }
 }
 

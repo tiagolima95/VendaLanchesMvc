@@ -18,7 +18,8 @@ namespace Projeto_AspNetCore_Mvc.Models
         public static CarrinhoCompra GetCarrinho(IServiceProvider services)
         {
             //define uma sessão
-            ISession session = services.GetRequiredService<IHttpContextAccessor>()?.HttpContext.Session;
+            ISession session =
+                services.GetRequiredService<IHttpContextAccessor>()?.HttpContext.Session;
 
             //obtendo um serviço do tipo do contexto
             var context = services.GetService<AppDbContext>();
