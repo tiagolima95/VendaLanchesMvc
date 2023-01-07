@@ -50,7 +50,7 @@ namespace Projeto_AspNetCore_Mvc.Models
                     Lanche = lanche,
                     Quantidade = 1
                 };
-                CarrinhoCompraItens.Add(carrinhoCompraItem);
+                _context.CarrinhoCompraItems.Add(carrinhoCompraItem);
             }
             else
             {
